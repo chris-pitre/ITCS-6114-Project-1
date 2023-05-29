@@ -74,7 +74,7 @@ int main(){
 
             for(int k = 0; k < 20; k++){
                 printf("Iteration %d\n", k);
-                //fprintf(rdf, "Iteration %d\n", j);
+                //fprintf(rdf, "Iteration %d\n", k);
                 int *base_arr;
 
                 switch(j){
@@ -194,7 +194,7 @@ int main(){
             printf("    In-Place Quicksort: average: %fs, max: %fs, min:%fs\n", at_iqs, max_iqs, min_iqs);
             fprintf(df, "   In-Place Quicksort: average: %fs, max: %fs, min:%fs\n", at_iqs, max_iqs, min_iqs);
             printf("    Modified Quicksort: average: %fs, max: %fs, min:%fs\n", at_mqs, max_mqs, min_mqs);
-            fprintf(df, "   Modified Quicksort: average: %fs, max: %fs, min:%f\n", at_mqs, max_mqs, min_mqs);
+            fprintf(df, "   Modified Quicksort: average: %fs, max: %fs, min:%fs\n", at_mqs, max_mqs, min_mqs);
 
             printf("\n");
             fprintf(df, "\n");
@@ -396,7 +396,7 @@ void mod_quick_sort(int arr[], int left, int right){
 int mod_partition(int arr[], int left, int right){
     int mid, pivot, i, j;
 
-    mid = (left + (right - left)) / 2;
+    mid = (left + right) / 2;
     if(arr[mid] < arr[left])
         swap(&arr[mid], &arr[left]);
     if(arr[right] < arr[left])
