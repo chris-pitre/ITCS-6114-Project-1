@@ -7,24 +7,31 @@
 #define MAX(a, b) (((a) > (b)) ? (a) : (b))
 #define MIN(a, b) (((a) < (b)) ? (a) : (b))
 
+/* Utility functions used to populate array to be sorted */
 int *random_input_arr(int count);
 int *sorted_arr(int count);
 int *reverse_sorted_arr(int count);
 
+/* Utility function used to swap elements in an array */
 void swap(int *a, int *b);
 
+/* Functions used for insertion sort */
 void insertion_sort(int arr[], int left, int right);
 
+/* Functions used for merge sort */
 void merge_sort(int arr[], int left_index, int right_index);
 void merge(int arr[], int left_index, int mid_index, int right_index);
 
+/* Functions used for heap sort */
 void heap_sort(int arr[], int count);
 void heap_insert(int heap[], int element, int *last_element);
 int heap_remove_min(int heap[], int *last_element);
 
+/* Functions used for in-place quicksort */
 void quick_sort(int arr[], int left, int right);
 int partition(int arr[], int left, int right);
 
+/* Functions used for modified quicksort */
 void mod_quick_sort(int arr[], int left, int right);
 int mod_partition(int arr[], int left, int right);
 
@@ -36,23 +43,20 @@ int main(){
     int count;
     int input_sizes[] = {1000, 2000, 3000, 5000, 10000, 20000, 30000, 40000, 50000, 60000};
     FILE *df;
-    //FILE *rdf;
 
     df = fopen("data.txt", "w");
-    //rdf = fopen("raw_data.txt", "w");
 
     srand(time(NULL));
 
-
+    /* Loop to iterate through all 10 input sizes */
     for(int i = 0; i < 10; i++){
         count = input_sizes[i];
 
         printf("Input Size: %d\n", count);
 
-        fprintf(df, "Input Size: %d\n", count);
-        //fprintf(rdf, "Input Size: %d\n", count);
+        fprintf(df, "Input Size: %d\n", count); 
         
-
+        /* Loop to iterate through all three differently sorted arrays */
         for(int j = 0; j < 3; j++){
             at_is = 0;
             at_ms = 0;
@@ -71,12 +75,13 @@ int main(){
             min_hs = DBL_MAX;
             min_iqs = DBL_MAX;
             min_mqs = DBL_MAX;
-
+            
+            /* Loop to iterate through multiple different samples */
             for(int k = 0; k < 20; k++){
                 printf("Iteration %d\n", k);
-                //fprintf(rdf, "Iteration %d\n", k);
                 int *base_arr;
-
+                
+                /* Selects which array to used based off of j */
                 switch(j){
                     default:;
                     case 0:;
@@ -92,8 +97,9 @@ int main(){
 
                 int unsorted_arr[count];
 
+                /* Insertion Sort */
                 memcpy(unsorted_arr, base_arr, count * sizeof(int));
-
+                
                 t = clock();
                 insertion_sort(unsorted_arr, 0, count);
                 t = clock() - t;
@@ -103,8 +109,8 @@ int main(){
                 min_is = MIN(min_is, time_spent);
 
                 printf("Insertion-Sort took %f seconds to execute\n", time_spent);
-                //fprintf(rdf, "Insertion-Sort took %f seconds to execute\n", time_spent);
 
+                /* Merge Sort */
                 memcpy(unsorted_arr, base_arr, count * sizeof(int));
 
                 t = clock();
@@ -116,8 +122,8 @@ int main(){
                 min_ms = MIN(min_ms, time_spent);
 
                 printf("Merge-Sort took %f seconds to execute\n", time_spent);
-                //fprintf(rdf, "Merge-Sort took %f seconds to execute\n", time_spent);
-
+                
+                /* Heap Sort */
                 memcpy(unsorted_arr, base_arr, count * sizeof(int));
 
                 t = clock();
@@ -129,8 +135,8 @@ int main(){
                 min_hs = MIN(min_hs, time_spent);
 
                 printf("Heap-Sort took %f seconds to execute\n", time_spent);
-                //fprintf(rdf, "Heap-Sort took %f seconds to execute\n", time_spent);
-
+                
+                /* In-place Quicksort */
                 memcpy(unsorted_arr, base_arr, count * sizeof(int));
 
                 t = clock();
@@ -142,8 +148,8 @@ int main(){
                 min_iqs = MIN(min_iqs, time_spent);
 
                 printf("In-Place Quicksort took %f seconds to execute\n", time_spent);
-                //fprintf(rdf, "In-Place Quicksort took %f seconds to execute\n", time_spent);
 
+                /* Modified Quicksort */
                 memcpy(unsorted_arr, base_arr, count * sizeof(int));
 
                 t = clock();
@@ -155,11 +161,9 @@ int main(){
                 min_mqs = MIN(min_mqs, time_spent);
 
                 printf("Modified Quicksort took %f seconds to execute\n", time_spent);
-                //fprintf(rdf, "Modified Quicksort took %f seconds to execute\n", time_spent);
-
                 printf("\n");
-                //fprintf(rdf, "\n");
-
+                
+                /* Frees up dynamically allocated memory from populating arrays */
                 free(base_arr);
             }
 
@@ -198,16 +202,19 @@ int main(){
 
             printf("\n");
             fprintf(df, "\n");
-            //fprintf(rdf, "\n");
         }
     }
 
     fclose(df);
-    //fclose(rdf);
 
     return 0;
 }
-
+/**
+ * Creates an array based on a specified size and randomly populates it
+ *
+ * @param count Size of the array
+ * @returns arr Randomly generated array
+ */
 int *random_input_arr(int count){
     int *arr = (int*)malloc((count) * sizeof(int));
     for(int i = 0; i < count; i++)
@@ -215,6 +222,12 @@ int *random_input_arr(int count){
     return arr;
 }
 
+/**
+ * Creates an array based on a specified size and populates it with 0 to count-1
+ *
+ * @param count Size of the array
+ * @returns arr Pre-sorted array
+ */
 int *sorted_arr(int count){
     int *arr = (int*)malloc((count) * sizeof(int));
     for(int i = 0; i < count; i++)
@@ -222,6 +235,12 @@ int *sorted_arr(int count){
     return arr;
 }
 
+/**
+ * Creates an array based on a specified size and populates it with count-1 to 0
+ *
+ * @param count Size of the array
+ * @returns arr Reverse sorted array
+ */
 int *reverse_sorted_arr(int count){
     int *arr = (int*)malloc((count) * sizeof(int));
     for(int i = 0; i < count; i++)
@@ -229,12 +248,25 @@ int *reverse_sorted_arr(int count){
     return arr;
 }
 
+/**
+ * Swaps the integers a and b in an array
+ *
+ * @param *a Pointer to an integer in an array
+ * @param *b Pointer to an integer in an array
+ */
 void swap(int *a, int *b){
     int temp = *a;
     *a = *b;
     *b = temp;
 }
 
+/**
+ * Sorts an array between a left and right index using insertion sort
+ *
+ * @param arr Array to be sorted
+ * @param left Leftmost index to be sorted
+ * @param right Rightmost index to be sorted
+ */
 void insertion_sort(int arr[], int left, int right){
     for(int i = left + 1; i <= right; i++){
         for(int j = i; j > left && arr[j - 1] > arr[j]; j--){
@@ -243,6 +275,13 @@ void insertion_sort(int arr[], int left, int right){
     }
 }
 
+/**
+ * Sorts an array between a left and right index using merge sort
+ *
+ * @param arr Array to be sorted
+ * @param left_index Leftmost index to be sorted
+ * @param right_index Rightmost index to be sorted
+ */
 void merge_sort(int arr[], int left_index, int right_index){
     if(left_index < right_index){
         int mid_index = (left_index + right_index)/2;
@@ -252,6 +291,14 @@ void merge_sort(int arr[], int left_index, int right_index){
     }
 }
 
+/**
+ * Merges and sorts split subarrays from merge_sort
+ *
+ * @param arr Array to be sorted
+ * @param left_index Leftmost index of the first subarray
+ * @param mid_index Dividing index for both subarrays
+ * @param right_index Rightmost index of the second subarray
+ */
 void merge(int arr[], int left_index, int mid_index, int right_index){
     int left_size, right_size, left_current_index, right_current_index, merge_index;
 
@@ -296,6 +343,12 @@ void merge(int arr[], int left_index, int mid_index, int right_index){
 
 }
 
+/**
+ * Sorts an array using heap sort
+ *
+ * @param arr Array to be sorted
+ * @param count Size of the array
+ */
 void heap_sort(int arr[], int count){
     int *heap = (int*)malloc((count+1) * sizeof(int));
     int last_element;
@@ -311,6 +364,13 @@ void heap_sort(int arr[], int count){
     }
 }
 
+/**
+ * Inserts an element into a vector-based heap
+ *
+ * @param heap Heap to be inserted into
+ * @param element Element to be inserted
+ * @param *last_element Pointer to the last element in the heap
+ */
 void heap_insert(int heap[], int element, int *last_element){
     (*last_element)++;
     heap[*last_element] = element;
@@ -321,6 +381,12 @@ void heap_insert(int heap[], int element, int *last_element){
     }
 }
 
+/**
+ * Removes the root node of a min-heap
+ *
+ * @param heap Heap to be accessed
+ * @param *last_element Pointer to the last element in the heap
+ */
 int heap_remove_min(int heap[], int *last_element){
     int temp = heap[1];
     heap[1] = heap[*last_element];
@@ -351,6 +417,13 @@ int heap_remove_min(int heap[], int *last_element){
     return temp;
 }
 
+/**
+ * Sorts an array between a left and right index using quicksort
+ *
+ * @param arr Array to be sorted
+ * @param left Leftmost index to be sorted
+ * @param right Rightmost index to be sorted
+ */
 void quick_sort(int arr[], int left, int right){
     if(left < right){
         int h;
@@ -360,6 +433,15 @@ void quick_sort(int arr[], int left, int right){
     }
 }
 
+/**
+ * Creates a partition between the left and right indexes where elements that
+ * are less than the randomly selected pivot are on the left, and elements are 
+ * greater than the randomly selected pivot are on the right.
+ *
+ * @param arr Array to be used
+ * @param left Leftmost index to be used
+ * @param right Rightmost index to be used
+ */
 int partition(int arr[], int left, int right){
     int pivot, i, j;
 
@@ -381,6 +463,15 @@ int partition(int arr[], int left, int right){
     return i + 1;
 }
 
+/**
+ * Sorts an array between a left and right index using a modified quicksort
+ * When the subarray to be sorted is less than or equal to 15, insertion sort 
+ * is used instead
+ *
+ * @param arr Array to be sorted
+ * @param left Leftmost index to be sorted
+ * @param right Rightmost index to be sorted
+ */
 void mod_quick_sort(int arr[], int left, int right){
     if(left < right){
         if(left + 15 <= right){
@@ -393,6 +484,16 @@ void mod_quick_sort(int arr[], int left, int right){
     }
 }
 
+/**
+ * Creates a partition between the left and right indexes where elements that
+ * are less than the pivot are on the left, and elements are greater than the
+ * pivot are on the right.
+ * The pivot is selected using the median-of-three strategy.
+ *
+ * @param arr Array to be used
+ * @param left Leftmost index to be used
+ * @param right Rightmost index to be used
+ */
 int mod_partition(int arr[], int left, int right){
     int mid, pivot, i, j;
 
